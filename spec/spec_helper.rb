@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "space_invaders_radar"
+require "./spec/models/shared_examples/radar_model"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure
