@@ -13,4 +13,17 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+  # https://github.com/erikhuda/thor/blob/v1.1.0/spec/helper.rb
+  def capture(stream)
+    begin
+      stream = stream.to_s
+      eval "$#{stream} = StringIO.new"
+      yield
+      result = eval("$#{stream}").string
+    ensure
+      eval("$#{stream} = #{stream.upcase}")
+    end
+
+    result
+  end
 end

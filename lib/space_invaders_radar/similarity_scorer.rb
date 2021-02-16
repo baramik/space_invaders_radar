@@ -6,6 +6,8 @@ module SpaceInvadersRadar
     AVAILABLE_ANALYZERS = { levenshtein: SpaceInvadersRadar::Analyzers::LevenshteinComparison }.freeze
 
     def initialize(to_compare:, compare_target:, threshold: DEFAULT_THRESHOLD, analyzer: :levenshtein)
+      raise ArgumentError, "wrong analyzer" unless AVAILABLE_ANALYZERS[analyzer]
+
       @threshold      = threshold
       @analyzer       = AVAILABLE_ANALYZERS[analyzer]
       @to_compare     = to_compare

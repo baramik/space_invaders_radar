@@ -1,8 +1,10 @@
 module SpaceInvadersRadar
   class ObjectScanner
-    def initialize(invaders_path, radar_screen_path)
+    def initialize(invaders_path, radar_screen_path, threshold:, analyzer:)
       @invaders_path     = invaders_path
       @radar_screen_path = radar_screen_path
+      @threshold         = threshold
+      @analyzer          = analyzer
     end
 
     def scan
@@ -13,7 +15,10 @@ module SpaceInvadersRadar
             column_range = column_idx..(column_idx + invader.width - 1)
 
             scan_window = scan_window(row_range, column_range)
-            scorer = SimilarityScorer.new(to_compare: invader.content, compare_target: scan_window.to_a)
+            scorer = SimilarityScorer.new(to_compare: invader.content,
+                                          compare_target: scan_window.to_a,
+                                          threshold: threshold,
+                                          analyzer: analyzer)
             apply_score_result(radar_matrix, row_range, column_range, invader.id) if scorer.valid?
           end
         end
@@ -24,7 +29,7 @@ module SpaceInvadersRadar
 
     private
 
-    attr_reader :invaders_path, :radar_screen_path
+    attr_reader :invaders_path, :radar_screen_path, :threshold, :analyzer
 
     def format_result(radar_matrix)
       radar_matrix.to_a.map { |row| "#{row.join}\n" }.join
